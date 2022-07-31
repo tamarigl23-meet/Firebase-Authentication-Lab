@@ -12,10 +12,13 @@ config = firebaseConfig = {
   "storageBucket": "fir-e5575.appspot.com",
   "messagingSenderId": "865543612227",
   "appId": "1:865543612227:web:4bfd59b7b8641d8667f1f6",
-  "measurementId": "G-B2VWN8FX6V"
+  "measurementId": "G-B2VWN8FX6V",
+  "databaseURL": "https://fir-e5575-default-rtdb.europe-west1.firebasedatabase.app/"
 }
-firebase = pyrebase.intialize_app(config)
+￼
+firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
+db = firebase.database()
 
 @app.route('/', methods=['GET', 'POST'])
 def signin():
