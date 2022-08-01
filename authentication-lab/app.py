@@ -67,8 +67,8 @@ def add_tweet():
 
 @app.route('/all_tweets', methods=['GET', 'POST'])
 def all_tweets():
-    users1 = db.child("Tweets").get().val()
-    return render_template("tweets.html")
+    tweets = db.child("Tweets").get().val()
+    return render_template("tweets.html", tweets=tweets)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -6,5 +6,10 @@
 
 </head>
 <body>
-    <h2>{{users1}}</h2>
+    <ul>
+        {% for i in tweets %}
+        <h2> {{tweets[i]}} </h2>
+        {% endfor %}
+    </ul>
+
 </html>
