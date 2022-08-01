@@ -15,7 +15,7 @@ config = firebaseConfig = {
   "measurementId": "G-B2VWN8FX6V",
   "databaseURL": "https://fir-e5575-default-rtdb.europe-west1.firebasedatabase.app/"
 }
-￼
+
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 db = firebase.database()
@@ -24,13 +24,13 @@ db = firebase.database()
 def signin():
     error = ""
     if request.method == 'POST':
-       email = request.form['email']
-       password = request.form['password']
-       try:
-        login_session['user'] = auth.sign_in_with_email_and_password(email, password)
-        return redirect(url_for('add_tweet'))
-       except:
-        error = "Authentication failed"
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            login_session['user'] = auth.sign_in_with_email_and_password(email, password)
+            return redirect(url_for('add_tweet'))
+        except:
+            error = "Authentication failed"
 
     return render_template("signin.html")
 
@@ -38,21 +38,37 @@ def signin():
 def signup():
     error = ""
     if request.method == 'POST':
-       email = request.form['email']
-       password = request.form['password']
-       try:
-        login_session['user'] = auth.create_user_with_email_and_password(email, password)
-        return redirect(url_for('add_tweet'))
-       except:
-        error = "Authentication failed"
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            login_session['user'] = auth.create_user_with_email_and_password(email, password)
+            user = {"full_name":request.form['full_name'], "password":request.form['password'], "username": request.form['username'], "bio":request.form['bio']}
+            db.child("Users").child(login_session['user']['localId']).set(user)
+            return redirect(url_for('add_tweet'))
+        except:
+            error = "Authentication failed"
 
     return render_template("signup.html")
 
 
 @app.route('/add_tweet', methods=['GET', 'POST'])
 def add_tweet():
+    if request.method == 'POST':
+        Title = request.form['title']
+        Text = request.form['text']
+        try:
+            tweet = {"Title":request.form['title'], "Text":request.form['text'], "uid":'user'}
+            db.child("Tweets").push(tweet)
+            return redirect(url_for('all_tweets'))
+        except:
+            error = "Authentication failed"
+
     return render_template("add_tweet.html")
 
+@app.route('/all_tweets', methods=['GET', 'POST'])
+def all_tweets():
+    users1 = db.child("Tweets").get().val()
+    return render_template("tweets.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
