@@ -8,7 +8,8 @@
 <body>
     <ul>
         {% for i in tweets %}
-        <h2> {{tweets[i]}} </h2>
+        <h2> {{tweets[i][title]}} </h2>
+        <h2> {{tweets[i][text]}} </h2>
         {% endfor %}
     </ul>
 
